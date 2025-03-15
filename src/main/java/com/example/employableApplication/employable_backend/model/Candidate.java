@@ -53,5 +53,9 @@ public class Candidate {
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
     private Set<Application> applications;
 
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    Job job;
+
 
 }

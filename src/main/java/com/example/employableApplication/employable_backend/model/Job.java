@@ -1,5 +1,6 @@
 package com.example.employableApplication.employable_backend.model;
 
+import com.example.employableApplication.employable_backend.types.Sector;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +17,20 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class Job {
+
+    @Id
+    @GeneratedValue
+    @Column
+    Long id;
+
     @Column
     String jobRole;
 
     @Column
     String jobType;
+
+    @Column
+    Sector jobSector;
 
     @Column
     String location;
@@ -33,10 +43,6 @@ public class Job {
 
     @Column
     String benefits;
-
-    @OneToOne
-    @JoinColumn(name = "employer_id")
-    Employer Employer;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     List<Candidate> candidate;

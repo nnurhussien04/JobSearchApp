@@ -29,9 +29,7 @@ public class Application {
     @JoinColumn(name = "job_id")
     private Job job;
 
-
-
-
-
+    @Column
+    boolean outcome;
 
 }
