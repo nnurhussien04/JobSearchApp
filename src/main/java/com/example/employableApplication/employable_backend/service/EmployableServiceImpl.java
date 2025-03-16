@@ -30,12 +30,14 @@ public class EmployableServiceImpl implements EmployableService{
     @Autowired
     JobRepository jobRepository;
 
+    @Override
     public ArrayList<Job> listAllJobs(){
         ArrayList<Job> jobs = new ArrayList<>();
         jobRepository.findAll().forEach(jobs::add);
         return jobs;
     }
 
+    @Override
     public ArrayList<Job> listAllJobsBySector(Sector sector){
         ArrayList<Job> jobs = new ArrayList<>();
         jobRepository.findAll().forEach(x -> {
@@ -46,6 +48,7 @@ public class EmployableServiceImpl implements EmployableService{
         return jobs;
     }
 
+    @Override
     public ArrayList<Job> listAllJobsByWage(int salary){
         ArrayList<Job> jobs = new ArrayList<>();
         jobRepository.findAll().forEach(x -> {
@@ -56,6 +59,7 @@ public class EmployableServiceImpl implements EmployableService{
         return jobs;
     }
 
+    @Override
     public Job addJob(Job job){
         if(job.getJobSector() != null || job.getSalary() < 0 || job.getEmployer() == null || job.getJobType().isEmpty() || job.getJobRole().isEmpty() || job.getBenefits() == null || job.getLocation() == null || job.getDescription() == null){
             throw new NullPointerException();
@@ -63,6 +67,7 @@ public class EmployableServiceImpl implements EmployableService{
         return jobRepository.save(job);
     }
 
+    @Override
     public Application addApplication(Application application){
         if(application.getJob() == null || application.getCandidate() == null){
             throw new NullPointerException();
@@ -70,7 +75,8 @@ public class EmployableServiceImpl implements EmployableService{
         return applicationRepository.save(application);
     }
 
-    public ArrayList<Application> viewApplication(Long candidate_id){
+    @Override
+    public ArrayList<Application> viewApplicationByCandidateID(Long candidate_id){
         ArrayList<Application> applications = new ArrayList<>();
         applicationRepository.findAll().forEach(x -> {
             if(Objects.equals(x.getCandidate().getId(), candidate_id)){
@@ -80,7 +86,19 @@ public class EmployableServiceImpl implements EmployableService{
         return applications;
     }
 
-    public Application updateApplication(Application application){
+    @Override
+    public ArrayList<Application> viewApplicationByJobID(Long job_id){
+        ArrayList<Application> applications = new ArrayList<>();
+        applicationRepository.findAll().forEach(x -> {
+            if(Objects.equals(x.getJob().getId(), job_id)){
+                applications.add(x);
+            }
+        });
+        return applications;
+    }
+
+    @Override
+    public Application updateApplication(Application application) {
         if(application.getCandidate() == null || application.getJob() == null || application.getId() == null){
             throw new NullPointerException();
         }
@@ -92,6 +110,7 @@ public class EmployableServiceImpl implements EmployableService{
         return applicationRepository.save(newApplication);
     }
 
+    @Override
     public Interview bookInterview(Interview interview){
         if(interview.getCandidate() == null || interview.getJob() == null || interview.getInterviewDate() == null || interview.getInterviewTime() == null){
             throw new NullPointerException();
@@ -99,6 +118,7 @@ public class EmployableServiceImpl implements EmployableService{
         return interviewRepository.save(interview);
     }
 
+    @Override
     public Interview updateInterview(Interview interview){
         Interview newInterview = new Interview();
         if(interview.getCandidate() == null || interview.getJob() == null || interview.getInterviewDate() == null || interview.getInterviewTime() == null){
