@@ -1,9 +1,7 @@
 package com.example.employableApplication.employable_backend.controller;
 
 
-import com.example.employableApplication.employable_backend.model.Application;
-import com.example.employableApplication.employable_backend.model.Interview;
-import com.example.employableApplication.employable_backend.model.Job;
+import com.example.employableApplication.employable_backend.model.*;
 import com.example.employableApplication.employable_backend.service.EmployableService;
 import com.example.employableApplication.employable_backend.types.Sector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,14 @@ public class EmployableController {
         return new ResponseEntity<>(employableService.listAllJobs(), HttpStatus.OK);
     }
 
-    @GetMapping("/jobs")
+    @GetMapping("/jobs/sector")
     public ResponseEntity<?> viewJobsBySector(@RequestParam("sector") Sector sector){
         return new ResponseEntity<>(employableService.listAllJobsBySector(sector),HttpStatus.OK);
+    }
+
+    @GetMapping("/jobs/wage")
+    public ResponseEntity<?> viewJobsByWage(@RequestParam("salary") int salary){
+        return new ResponseEntity<>(employableService.listAllJobsByWage(salary),HttpStatus.OK);
     }
 
     @PostMapping("/jobs")
@@ -51,7 +54,7 @@ public class EmployableController {
 
     @PutMapping("/application")
     public ResponseEntity<?> updateApplication(@RequestBody Application application){
-        return new ResponseEntity<>(employableService.updateApplication(application),HttpStatus.ACCEPTED)
+        return new ResponseEntity<>(employableService.updateApplication(application),HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/interview")
@@ -61,8 +64,19 @@ public class EmployableController {
 
     @PutMapping("/interview")
     public ResponseEntity<?> updateInterview(@RequestBody Interview interview){
-        return new ResponseEntity<>(employableService.updateInterview(interview),HttpStatus.ACCEPTED)
+        return new ResponseEntity<>(employableService.updateInterview(interview),HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/interview")
+    public ResponseEntity<?> viewInterview(@RequestParam Long candidate_id, @RequestParam Long job_id){
+        return new ResponseEntity<>(employableService.viewInterview(candidate_id,job_id),HttpStatus.OK);
+    }
+
+
+
+
+
+
 
 
 

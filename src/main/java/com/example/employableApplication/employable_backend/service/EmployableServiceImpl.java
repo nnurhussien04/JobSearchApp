@@ -1,16 +1,21 @@
 package com.example.employableApplication.employable_backend.service;
 
-import com.example.employableApplication.employable_backend.model.Application;
-import com.example.employableApplication.employable_backend.model.Interview;
-import com.example.employableApplication.employable_backend.model.Job;
+import com.example.employableApplication.employable_backend.model.*;
 import com.example.employableApplication.employable_backend.repository.*;
 import com.example.employableApplication.employable_backend.types.Sector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.employableApplication.employable_backend.security.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class EmployableServiceImpl implements EmployableService{
@@ -29,6 +34,10 @@ public class EmployableServiceImpl implements EmployableService{
 
     @Autowired
     JobRepository jobRepository;
+
+    @Autowired
+    @Lazy
+    PasswordEncoder passwordEncoder;
 
     @Override
     public ArrayList<Job> listAllJobs(){
@@ -133,20 +142,48 @@ public class EmployableServiceImpl implements EmployableService{
         return interviewRepository.save(newInterview);
     }
 
+    @Override
+    public Interview viewInterview(Long candidate_id, Long job_id) {
+        ArrayList<Interview> interview = new ArrayList<>();
+        interviewRepository.findAll().forEach( x -> {
+            if(x.getJob().getId().equals(job_id) && x.getCandidate().getId().equals(candidate_id)){
+                interview.add(x);
+            }
+        });
+        return interview.get(0);
+    }
+
+    @Override
+    public Candidate addCandidate(Candidate candidate){
+        if(candidate.getLocation() == null || candidate.getBirthDate() == null || candidate.getLocation() == null || candidate.getEducation() == null || candidate.getExperience() == null || candidate.getFirstName() == null || candidate.getLastName() == null || candidate.getSector() == null || candidate.getSkills() == null){
+            throw new NullPointerException();
+        }
+        candidate.setPassword(passwordEncoder.encode(candidate.getPassword()));
+        return candidateRepository.save(candidate);
+    }
+
+    @Override
+    public Employer addEmployer(Employer employer){
+        if(employer.getBirthDate() == null || employer.getSector() == null || employer.getFirstName() == null || employer.getLastName() == null || employer.getLocation() == null || employer.getCompany() == null || employer.getEmailAddress() == null || employer.getUsername() == null || employer.getPassword() == null || employer.getRole() == null){
+            throw new NullPointerException();
+        }
+        employer.setPassword(passwordEncoder.encode(employer.getPassword()));
+        return employerRepository.save(employer);
+    }
 
 
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Employer> employer = employerRepository.findByUsername(username);
+        if(employer.isPresent()){
+            var userObj = employer.get();
+            return User.builder()
+                    .username(userObj.getUsername())
+                    .password(userObj.getPassword())
+                    .build();
+        }
+        else{
+            throw new UsernameNotFoundException(username);
+        }
+    }
 }

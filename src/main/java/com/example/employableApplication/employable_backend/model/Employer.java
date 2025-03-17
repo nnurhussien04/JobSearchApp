@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Employer {
     String lastName;
 
     @Column
-    Date birthDate;
+    LocalDate birthDate;
 
     @Column
     String emailAddress;
@@ -44,6 +45,7 @@ public class Employer {
     @Column
     String role;
 
+    @Enumerated(EnumType.STRING)
     @Column
     Sector sector;
 

@@ -57,5 +57,11 @@ public class Candidate {
     @JoinColumn(name = "job_id")
     Job job;
 
+    @Column
+    String username;
+
+    @Column
+    String password;
+
 
 }

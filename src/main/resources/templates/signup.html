@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Signup</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Employer Signup</h2>
+    <form action="/signup" method="POST">
+        <input type="text" name="firstName" placeholder="First Name" required>
+        <input type="text" name="lastName" placeholder="Last Name" required>
+        <label>Birth Date:</label>
+        <input type="date" name="birthDate" required>
+        <input type="email" name="emailAddress" placeholder="Email Address" required>
+        <input type="text" name="location" placeholder="Location" required>
+        <input type="text" name="company" placeholder="Company" required>
+        <input type="text" name="role" placeholder="Role" required>
+
+        <label>Sector:</label>
+        <select name="sector" required>
+            <option value="TECH">Tech</option>
+            <option value="FINANCE">Finance</option>
+            <option value="HEALTHCARE">Healthcare</option>
+            <option value="EDUCATION">Education</option>
+            <option value="OTHER">Other</option>
+        </select>
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+</div>
+
+</body>
+</html>

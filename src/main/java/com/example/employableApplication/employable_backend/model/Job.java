@@ -29,6 +29,7 @@ public class Job {
     @Column
     String jobType;
 
+    @Enumerated(EnumType.STRING)
     @Column
     Sector jobSector;
 
