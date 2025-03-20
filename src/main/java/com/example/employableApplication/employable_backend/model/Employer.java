@@ -2,6 +2,7 @@ package com.example.employableApplication.employable_backend.model;
 
 
 import com.example.employableApplication.employable_backend.types.Sector;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,6 +56,7 @@ public class Employer {
     @Column
     String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
     private List<Job> jobs;
 

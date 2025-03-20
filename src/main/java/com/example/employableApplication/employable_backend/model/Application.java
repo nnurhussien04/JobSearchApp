@@ -1,12 +1,17 @@
 package com.example.employableApplication.employable_backend.model;
 
+import com.example.employableApplication.employable_backend.types.Outcome;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Set;
+
+import static com.example.employableApplication.employable_backend.types.Outcome.PENDING;
 
 @Entity
 @Table(name="application")
@@ -29,7 +34,8 @@ public class Application {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @Column
-    boolean outcome;
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("PENDING")
+    Outcome outcome;
 
 }

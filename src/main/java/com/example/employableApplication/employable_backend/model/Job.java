@@ -1,6 +1,7 @@
 package com.example.employableApplication.employable_backend.model;
 
 import com.example.employableApplication.employable_backend.types.Sector;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,15 +46,17 @@ public class Job {
     @Column
     String benefits;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     List<Candidate> candidate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employer_id", nullable = false)
     Employer employer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
-    private Set<Application> applications;
+    List<Application> applications;
 
 
 

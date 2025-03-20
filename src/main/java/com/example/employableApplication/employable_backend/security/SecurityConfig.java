@@ -1,5 +1,6 @@
 package com.example.employableApplication.employable_backend.security;
 
+import com.example.employableApplication.employable_backend.repository.CandidateRepository;
 import com.example.employableApplication.employable_backend.service.EmployableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,6 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(){
         return employableService;
     }
-    
 
     @Bean
     public AuthenticationProvider authenticationProvider(){

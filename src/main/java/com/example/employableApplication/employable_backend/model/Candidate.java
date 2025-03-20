@@ -2,9 +2,11 @@ package com.example.employableApplication.employable_backend.model;
 
 import com.example.employableApplication.employable_backend.types.Education;
 import com.example.employableApplication.employable_backend.types.Sector;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +33,7 @@ public class Candidate {
     String location;
 
     @Column
-    Date birthDate;
+    LocalDate birthDate;
 
     @Column
     String emailAddress;
@@ -50,8 +52,9 @@ public class Candidate {
     @Column
     List<String> experience;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-    private Set<Application> applications;
+    List<Application> applications;
 
     @ManyToOne
     @JoinColumn(name = "job_id")

@@ -43,6 +43,7 @@ public class EmployableServiceImpl implements EmployableService{
     public ArrayList<Job> listAllJobs(){
         ArrayList<Job> jobs = new ArrayList<>();
         jobRepository.findAll().forEach(jobs::add);
+
         return jobs;
     }
 
@@ -70,7 +71,7 @@ public class EmployableServiceImpl implements EmployableService{
 
     @Override
     public Job addJob(Job job){
-        if(job.getJobSector() != null || job.getSalary() < 0 || job.getEmployer() == null || job.getJobType().isEmpty() || job.getJobRole().isEmpty() || job.getBenefits() == null || job.getLocation() == null || job.getDescription() == null){
+        if(job.getJobSector() == null || job.getSalary() < 0 || job.getJobType().isEmpty() || job.getJobRole().isEmpty() || job.getBenefits() == null || job.getLocation() == null || job.getDescription() == null){
             throw new NullPointerException();
         }
         return jobRepository.save(job);
@@ -115,7 +116,7 @@ public class EmployableServiceImpl implements EmployableService{
         newApplication.setId(application.getId());
         newApplication.setJob(application.getJob());
         newApplication.setCandidate(application.getCandidate());
-        newApplication.setOutcome(application.isOutcome());
+        newApplication.setOutcome(application.getOutcome());
         return applicationRepository.save(newApplication);
     }
 
@@ -158,6 +159,11 @@ public class EmployableServiceImpl implements EmployableService{
         if(candidate.getLocation() == null || candidate.getBirthDate() == null || candidate.getLocation() == null || candidate.getEducation() == null || candidate.getExperience() == null || candidate.getFirstName() == null || candidate.getLastName() == null || candidate.getSector() == null || candidate.getSkills() == null){
             throw new NullPointerException();
         }
+
+        if(candidateRepository.findByUsername(candidate.getUsername()).isPresent()){
+            throw new RuntimeException();
+        }
+
         candidate.setPassword(passwordEncoder.encode(candidate.getPassword()));
         return candidateRepository.save(candidate);
     }
@@ -167,6 +173,11 @@ public class EmployableServiceImpl implements EmployableService{
         if(employer.getBirthDate() == null || employer.getSector() == null || employer.getFirstName() == null || employer.getLastName() == null || employer.getLocation() == null || employer.getCompany() == null || employer.getEmailAddress() == null || employer.getUsername() == null || employer.getPassword() == null || employer.getRole() == null){
             throw new NullPointerException();
         }
+
+        if(employerRepository.findByUsername(employer.getUsername()).isPresent()){
+            throw new RuntimeException();
+        }
+
         employer.setPassword(passwordEncoder.encode(employer.getPassword()));
         return employerRepository.save(employer);
     }
@@ -175,8 +186,16 @@ public class EmployableServiceImpl implements EmployableService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Employer> employer = employerRepository.findByUsername(username);
+        Optional<Candidate> candidate = candidateRepository.findByUsername(username);
         if(employer.isPresent()){
             var userObj = employer.get();
+            return User.builder()
+                    .username(userObj.getUsername())
+                    .password(userObj.getPassword())
+                    .build();
+        }
+        else if(candidate.isPresent()){
+            var userObj = candidate.get();
             return User.builder()
                     .username(userObj.getUsername())
                     .password(userObj.getPassword())
