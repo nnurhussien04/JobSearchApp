@@ -151,6 +151,9 @@ public class EmployableServiceImpl implements EmployableService{
                 interview.add(x);
             }
         });
+        if(interview.size() == 0){
+            return null;
+        }
         return interview.get(0);
     }
 

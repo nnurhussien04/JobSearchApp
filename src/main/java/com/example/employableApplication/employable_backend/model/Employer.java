@@ -3,6 +3,7 @@ package com.example.employableApplication.employable_backend.model;
 
 import com.example.employableApplication.employable_backend.types.Sector;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,9 +51,11 @@ public class Employer {
     @Column
     Sector sector;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
     String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column
     String password;
 
