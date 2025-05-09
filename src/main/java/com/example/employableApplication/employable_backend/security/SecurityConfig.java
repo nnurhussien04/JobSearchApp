@@ -59,7 +59,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> {
                         auth.requestMatchers("/signup/**").permitAll();
-                        auth.anyRequest().permitAll();// Secure other endpoints
+                        auth.anyRequest().authenticated();// Secure other endpoints
                 });
 
         return http.build();
